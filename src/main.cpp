@@ -8,6 +8,7 @@ extern "C" {
 
 }
 // Global or Struct to keep track of state
+bool needs_redraw = true;
 int current_page_num = 0;
 int total_pages = 0;
 
@@ -51,35 +52,32 @@ int main(int argc, char **argv) {
     bool running = true;
     SDL_Event event;
     while (running) {
-        while (SDL_PollEvent(&event)) {
+        if (SDL_WaitEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = false;
-            }
-            else if (event.type == SDL_KEYDOWN) {
-                bool changed = false;
+            } else if (event.type == SDL_KEYDOWN) {
                 if (event.key.keysym.sym == SDLK_RIGHT && current_page_num < total_pages - 1) {
                     current_page_num++;
-                    changed = true;
-                }
-                else if (event.key.keysym.sym == SDLK_LEFT && current_page_num > 0) {
-                    current_page_num--;
-                    changed = true;
-                }
-
-                if (changed) {
-                    SDL_DestroyTexture(current_tex); // Clean up old page memory!
+                    SDL_DestroyTexture(current_tex);
                     current_tex = render_page_to_texture(ctx, doc, renderer, current_page_num);
-                    std::cout << "Page: " << current_page_num + 1 << "/" << total_pages << std::endl;
+                    needs_redraw = true;
+                } else if (event.key.keysym.sym == SDLK_LEFT && current_page_num > 0) {
+                    current_page_num--;
+                    SDL_DestroyTexture(current_tex);
+                    current_tex = render_page_to_texture(ctx, doc, renderer, current_page_num);
+                    needs_redraw = true;
+                } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_EXPOSED) {
+                    needs_redraw = true;
                 }
             }
         }
 
-        SDL_RenderClear(renderer);
-
-        // Draw the page centered in the window
-        SDL_RenderCopy(renderer, current_tex, NULL, NULL);
-
-        SDL_RenderPresent(renderer);
+        if (needs_redraw) {
+            SDL_RenderClear(renderer);
+            SDL_RenderCopy(renderer, current_tex, NULL, NULL);
+            SDL_RenderPresent(renderer);
+            needs_redraw = false;
+        }
     }
 
     SDL_DestroyTexture(current_tex);
