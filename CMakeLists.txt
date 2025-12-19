@@ -16,7 +16,9 @@ if(NOT MUPDF_LIB OR NOT MUPDF_THIRD_LIB)
     Ensure libmupdf.a and libmupdf-third.a are in that folder.")
 endif()
 
-add_executable(pdff src/main.cpp)
+add_executable(pdff src/main.cpp
+        src/core.cpp
+        src/core.h)
 
 # 5. Include your local headers
 target_include_directories(pdff PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
