@@ -8,8 +8,6 @@ extern "C" {
 
 class PDFCore {
     public:
-
-    // State
         void open(const std::string &file_path);
         int run();
     private:
@@ -20,13 +18,11 @@ class PDFCore {
         SDL_Texture *current_tex = nullptr;
         fz_context *ctx = fz_new_context(nullptr, nullptr, FZ_STORE_UNLIMITED);
 
-        // Global or Struct to keep track of state
         bool is_resizing = false;
         bool running = true;
         bool needs_redraw = true;
 
 
-        // Sizing
         float page_width{};
         float page_height{};
         float aspect_ratio{};
