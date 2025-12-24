@@ -18,7 +18,9 @@ endif()
 
 add_executable(pdff src/main.cpp
         src/core.cpp
-        src/core.h)
+        src/core.h
+        src/text.cpp
+        src/text.h)
 
 # 5. Include your local headers
 target_include_directories(pdff PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
