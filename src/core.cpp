@@ -207,7 +207,7 @@ SDL_Texture* PDFCore::render_page_to_texture(const int &page_num) {
 }
 
 fz_point PDFCore::screen_to_pdf(const int mx, const int my, const SDL_Rect& dest, fz_page* page) {
-    fz_rect page_rect = fz_bound_page(ctx, page);
+    const fz_rect &page_rect = fz_bound_page(ctx, page);
     const float pw = page_rect.x1 - page_rect.x0;
     const float ph = page_rect.y1 - page_rect.y0;
 
@@ -228,9 +228,9 @@ void PDFCore::render_selection(const SDL_Rect& dest, const int page_num) {
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(renderer, 0, 120, 215, 100); // Highlight color
 
-    fz_rect p_rect = fz_bound_page(ctx, page);
-    float pw = p_rect.x1 - p_rect.x0;
-    float ph = p_rect.y1 - p_rect.y0;
+    const fz_rect p_rect = fz_bound_page(ctx, page);
+    const float pw = p_rect.x1 - p_rect.x0;
+    const float ph = p_rect.y1 - p_rect.y0;
 
     for (int i = 0; i < n; i++) {
         SDL_Rect r;
