@@ -130,7 +130,6 @@ int PDFCore::run() {
     return 0;
 }
 
-
 void PDFCore::open(const std::string &file_path) {
       fz_register_document_handlers(ctx);
       doc = fz_open_document(ctx, file_path.c_str());
